@@ -1,3 +1,4 @@
+import 'package:camp_app/modules/hero-rank/list_item_model.dart';
 import 'package:flutter/material.dart';
 import '../../service/hero_rank.dart';
 import 'list_item.dart';
@@ -47,10 +48,8 @@ class _HeroRankState extends State<HeroRank> {
             itemCount: snapshot.data?.length ?? 0,
             itemBuilder: (context, index) {
               return HeroListItem(
-                heroName: snapshot.data?[index]!['heroInfo']!['heroName'],
-                rank: snapshot.data?[index]['winRate'],
-                imageUrl: snapshot.data?[index]!['heroInfo']!['heroIcon'],
-              );
+                  itemData:
+                      HeroRankListItemModel.fromJson(snapshot.data?[index]));
             },
           );
         },
