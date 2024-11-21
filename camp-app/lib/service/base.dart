@@ -1,18 +1,40 @@
-import './base.dart';
+// ignore_for_file: equal_keys_in_map
 
-class HeroRankService extends BaseService {
-  Future<List<dynamic>> getHeroRanking() async {
-    dynamic rst = await request(
-        'https://kohcamp.qq.com/hero/getsharepagedetailranklistbyid', {
-      "cSystem": "android",
-      "h5Get": 1,
-      "rankId": 0,
-      "position": 0,
-      "segment": 1,
-      "bottomTab": ""
-    });
-    List<dynamic> list = rst['data']['list'];
-    return list;
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
+
+class BaseService {
+  Future<dynamic> request(url, params) async {
+    final headers = {
+      'origin': 'https://camp.qq.com',
+      'referer': 'https://camp.qq.com/',
+      'content-type': 'application/json',
+      'accept': 'application/json, text/plain, */*',
+      'csystem': 'android',
+      'h5get': '1',
+      'msdktoken': 'ftfjxAuZ',
+      'noencrypt': '1',
+      'user-agent':
+          'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Mobile Safari/537.36',
+      'x-client-proto': 'https',
+      'accept-language': 'zh-CN,zh;q=0.9,en;q=0.8,ja;q=0.7,zh-TW;q=0.6',
+      'sec-ch-ua':
+          '"Not)A;Brand";v="99", "Google Chrome";v="127", "Chromium";v="127"',
+      'sec-ch-ua-mobile': '?1',
+      'sec-ch-ua-platform': '"Android"',
+      'sec-fetch-dest': 'empty',
+      'sec-fetch-mode': 'cors',
+      'sec-fetch-site': 'same-site',
+      'sec-ch-ua-platform': '"Android"',
+      'sec-fetch-dest': 'empty',
+      'sec-fetch-mode': 'cors',
+      'sec-fetch-site': 'same-site',
+    };
+    final dio = Dio();
+    Response<String> response =
+        await dio.post(url, data: params, options: Options(headers: headers));
+    return jsonDecode(response.data!);
   }
 }
 
