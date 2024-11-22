@@ -1,6 +1,7 @@
 import 'package:camp_app/common/provider/change_notifier_provider.dart';
 import 'package:camp_app/modules/equip-list/list_model.dart';
 import 'package:flutter/material.dart';
+import 'package:camp_app/common/provider/consumer.dart';
 
 class EquipList extends StatefulWidget {
   const EquipList({Key? key}) : super(key: key);
@@ -27,65 +28,54 @@ class _EquipListState extends State<EquipList> {
                 data: ListModel(),
                 child: Builder(
                   builder: (context) {
-                    return Column(
-                      children: [
-                        Row(
-                          children: [
-                            SizedBox(
-                              width: 200,
-                              height: 50,
-                              child: TextField(
-                                controller: nameInputControler,
-                              ),
-                            ),
-                            SizedBox(
+                    return Consumer<ListModel>(builder: (context, listModel) {
+                      return Column(
+                        children: [
+                          Row(
+                            children: [
+                              SizedBox(
                                 width: 200,
                                 height: 50,
                                 child: TextField(
-                                  controller: descInputControler,
-                                ))
-                          ],
-                        ),
-                        Builder(builder: (context) {
-                          return ElevatedButton(
-                              onPressed: () => {
-                                    ChangeNotifierProvider.of<ListModel>(
-                                            context)!
-                                        .add(Item(nameInputControler.text,
-                                            descInputControler.text))
-                                  },
-                              child: const Text('add item'));
-                        }),
-                        ListView.builder(
-                          shrinkWrap: true,
-                          itemCount:
-                              ChangeNotifierProvider.of<ListModel>(context)!
-                                  .list
-                                  .length,
-                          itemBuilder: (context, index) {
-                            return Row(
-                              children: [
-                                Text(ChangeNotifierProvider.of<ListModel>(
-                                        context)!
-                                    .list[index]
-                                    .name),
-                                const SizedBox(
-                                  width: 20,
+                                  controller: nameInputControler,
                                 ),
-                                Expanded(
-                                  flex: 1,
-                                  child: Text(
-                                      ChangeNotifierProvider.of<ListModel>(
-                                              context)!
-                                          .list[index]
-                                          .desc),
-                                )
-                              ],
-                            );
-                          },
-                        )
-                      ],
-                    );
+                              ),
+                              SizedBox(
+                                  width: 200,
+                                  height: 50,
+                                  child: TextField(
+                                    controller: descInputControler,
+                                  ))
+                            ],
+                          ),
+                          ElevatedButton(
+                              onPressed: () => {
+                                    listModel!.add(Item(nameInputControler.text,
+                                        descInputControler.text))
+                                  },
+                              child: const Text('add item')),
+                          ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: listModel!.list.length,
+                            itemBuilder: (context, index) {
+                              Item item = listModel.list[index];
+                              return Row(
+                                children: [
+                                  Text(item.name),
+                                  const SizedBox(
+                                    width: 20,
+                                  ),
+                                  Expanded(
+                                    flex: 1,
+                                    child: Text(item.desc),
+                                  )
+                                ],
+                              );
+                            },
+                          )
+                        ],
+                      );
+                    });
                   },
                 ))),
       ),
